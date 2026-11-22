@@ -47,7 +47,11 @@ export function setRovingIndex(items: readonly HTMLElement[], active: HTMLElemen
 export class TypeAhead {
   private buffer = '';
   private timer: ReturnType<typeof setTimeout> | null = null;
-  constructor(private readonly timeout = 1000) {}
+  private readonly timeout: number;
+
+  constructor(timeout = 1000) {
+    this.timeout = timeout;
+  }
 
   match(key: string, labels: readonly string[], current: number): number {
     if (key.length !== 1 || (key === ' ' && !this.buffer)) return -1;

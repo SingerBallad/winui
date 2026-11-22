@@ -321,11 +321,12 @@ class CardStack<C extends StackCard> {
   private scrollRaf = 0;
   private unclipTimer: ReturnType<typeof setTimeout> | null = null;
   private readonly slots = new WeakMap<Element, { off: number; h: number }>();
+  readonly root: HTMLElement;
+  private readonly hooks: StackHooks;
 
-  constructor(
-    readonly root: HTMLElement,
-    private readonly hooks: StackHooks,
-  ) {
+  constructor(root: HTMLElement, hooks: StackHooks) {
+    this.root = root;
+    this.hooks = hooks;
     root.classList.add('w-stack');
     this.bar.className = 'w-stack-bar';
     this.toggleBtn.className = 'w-stack-toggle';

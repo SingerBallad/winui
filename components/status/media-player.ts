@@ -33,21 +33,25 @@ export function formatMediaTime(seconds: number): string {
   return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
 }
 
+interface MtcSliderOptions {
+  onInput: (v: number) => void;
+  onCommit?: (v: number) => void;
+  text: (v: number) => string;
+  largeStep?: () => number;
+}
+
 class MtcSlider {
   value = 0;
   min = 0;
   max = 100;
   step = 1;
   private dragging = false;
-  constructor(
-    readonly el: HTMLElement,
-    private readonly opts: {
-      onInput: (v: number) => void;
-      onCommit?: (v: number) => void;
-      text: (v: number) => string;
-      largeStep?: () => number;
-    },
-  ) {
+  readonly el: HTMLElement;
+  private readonly opts: MtcSliderOptions;
+
+  constructor(el: HTMLElement, opts: MtcSliderOptions) {
+    this.el = el;
+    this.opts = opts;
     el.addEventListener('pointerdown', (e) => {
       if (e.button !== 0 || el.hasAttribute('aria-disabled')) return;
       el.setPointerCapture(e.pointerId);

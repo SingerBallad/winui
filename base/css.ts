@@ -4,7 +4,11 @@ export { materialDeclarations, materialOverrides, materialSurface };
 
 export class CSSResult {
   private _sheet: CSSStyleSheet | null = null;
-  constructor(readonly cssText: string) {}
+  readonly cssText: string;
+
+  constructor(cssText: string) {
+    this.cssText = cssText;
+  }
 
   get sheet(): CSSStyleSheet {
     if (!this._sheet) {

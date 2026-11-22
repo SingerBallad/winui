@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  esbuild: { legalComments: 'inline' },
   build: {
     lib: {
       entry: 'index.ts',

@@ -91,7 +91,7 @@ export class WinCalendarDatePicker extends WinElement {
     displayMode: { type: String, attribute: 'display-mode', default: 'month' },
     isCalendarOpen: { type: Boolean, attribute: 'is-calendar-open' },
     disabled: { type: Boolean },
-    name: { type: String },
+    name: { type: String, reflect: true },
     locale: { type: String },
   };
   declare date: string;

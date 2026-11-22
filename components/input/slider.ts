@@ -213,7 +213,7 @@ export class WinSlider extends WinElement {
     snapsTo: { type: String, attribute: 'snaps-to', default: 'step-values' },
     header: { type: String },
     disabled: { type: Boolean },
-    name: { type: String },
+    name: { type: String, reflect: true },
   };
   declare value: number;
   declare min: number;

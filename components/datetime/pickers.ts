@@ -298,7 +298,7 @@ abstract class PickerFieldBase extends WinElement {
   static override props: PropDefs = {
     header: { type: String },
     disabled: { type: Boolean },
-    name: { type: String },
+    name: { type: String, reflect: true },
     locale: { type: String },
     lightDismissOverlayMode: { type: String, attribute: 'light-dismiss-overlay-mode', default: 'auto' },
   };

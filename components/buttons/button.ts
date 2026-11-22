@@ -218,12 +218,50 @@ export abstract class ButtonBase extends WinElement {
 
 export class WinButton extends ButtonBase {
   static override styles = [buttonSurfaceCss];
+  static override formAssociated = true;
+  static override props: PropDefs = {
+    type: { type: String, reflect: true, default: 'button' },
+    name: { type: String, reflect: true },
+    value: { type: String },
+  };
+  declare type: 'button' | 'submit' | 'reset';
+  declare name: string;
+  declare value: string;
+
   static {
     this.define('win-button');
   }
+
+  get form(): HTMLFormElement | null {
+    return this.internals.form;
+  }
+
   protected override firstConnected(): void {
     super.firstConnected();
     if (this.flyout) this.aria('aria-haspopup', 'true');
+  }
+
+  protected override onActivate(ev: MouseEvent): void {
+    super.onActivate(ev);
+    if ((this.type !== 'submit' && this.type !== 'reset') || this.flyout) return;
+    setTimeout(() => {
+      if (!ev.defaultPrevented && !this.disabled && !this.matches(':disabled')) this.submitForm();
+    });
+  }
+
+  private submitForm(): void {
+    const form = this.internals.form;
+    if (!form) return;
+    if (this.type === 'reset') {
+      form.reset();
+      return;
+    }
+    if (this.name) this.internals.setFormValue(this.value ?? '');
+    try {
+      form.requestSubmit();
+    } finally {
+      if (this.name) this.internals.setFormValue(null);
+    }
   }
 }
 
@@ -345,7 +383,7 @@ export class WinToggleButton extends ButtonBase {
     checked: { type: Boolean },
     indeterminate: { type: Boolean },
     threeState: { type: Boolean, attribute: 'three-state' },
-    name: { type: String },
+    name: { type: String, reflect: true },
     value: { type: String, default: 'on' },
   };
   declare checked: boolean;

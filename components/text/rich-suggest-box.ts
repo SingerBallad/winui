@@ -80,7 +80,7 @@ export class WinRichSuggestBox extends WinElement {
     prefixes: { type: String, default: '@' },
     maxSuggestions: { type: Number, attribute: 'max-suggestions', default: 8 },
     disabled: { type: Boolean },
-    name: { type: String },
+    name: { type: String, reflect: true },
     suggestions: { type: Array, attribute: 'suggestions' },
   };
   declare header: string;

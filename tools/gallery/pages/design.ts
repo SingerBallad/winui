@@ -260,7 +260,7 @@ const pages: GalleryPage[] = [
     category: 'styles',
     icon: '',
     description:
-      'Symbol 枚举对应 Segoe Fluent Icons 字形（Windows 11 自带字体）；控件外壳使用的 V 形箭头、勾选、关闭等字形则以 SVG 绘制并对照字体逐一校准，可在任何平台一致显示并支持描边动画。任何控件的 icon 属性都接受 Symbol 名、码点（E80F）、svg:路径 或图片地址。',
+      'Symbol 枚举对应 Segoe Fluent Icons 字形（Windows 11 自带字体）；未安装该字体的平台（macOS、Linux 等）自动改用内置的 Fluent UI System Icons 字形，尺寸与基线和 Segoe 一致，可在设置中强制启用预览。控件外壳使用的 V 形箭头、勾选、关闭等字形则以 SVG 绘制并对照字体逐一校准，可在任何平台一致显示并支持描边动画。任何控件的 icon 属性都接受 Symbol 名、码点（E80F）、svg:路径 或图片地址。',
     samples: [
       {
         title: 'Symbol 枚举（SymbolIcon）',

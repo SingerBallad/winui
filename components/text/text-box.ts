@@ -154,6 +154,10 @@ export class WinTextBox extends FieldElement {
     del.addEventListener('click', () => this.clear());
   }
 
+  protected override get blocksImplicitSubmission(): boolean {
+    return !this.acceptsReturn;
+  }
+
   private get isMulti(): boolean {
     return this.acceptsReturn || (!!this.textWrapping && this.textWrapping !== 'no-wrap');
   }
@@ -171,7 +175,9 @@ export class WinTextBox extends FieldElement {
     el.addEventListener('input', () => this.onInput());
     el.addEventListener('change', () => this.emit('change', { value: this.value }));
     (el as HTMLElement).addEventListener('keydown', (ev) => {
-      if (ev.key === 'Enter' && el instanceof HTMLTextAreaElement && !this.acceptsReturn) ev.preventDefault();
+      if (ev.key !== 'Enter' || this.acceptsReturn) return;
+      if (el instanceof HTMLTextAreaElement) ev.preventDefault();
+      this.submitImplicitly(ev);
     });
     for (const t of ['select', 'selectionchange', 'keyup', 'pointerup']) {
       el.addEventListener(t, () => this.reportSelection());

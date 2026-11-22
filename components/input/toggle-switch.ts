@@ -172,7 +172,7 @@ export class WinToggleSwitch extends WinElement {
     offContent: { type: String, attribute: 'off-content' },
     noContent: { type: Boolean, attribute: 'no-content' },
     contentPlacement: { type: String, attribute: 'content-placement', reflect: true, default: 'right' },
-    name: { type: String },
+    name: { type: String, reflect: true },
     value: { type: String, default: 'on' },
   };
   declare checked: boolean;

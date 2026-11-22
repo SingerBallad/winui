@@ -98,7 +98,7 @@ export class WinTokenizingTextBox extends WinElement {
     allowDuplicates: { type: Boolean, attribute: 'allow-duplicates' },
     restrictToSuggestions: { type: Boolean, attribute: 'restrict-to-suggestions' },
     disabled: { type: Boolean },
-    name: { type: String },
+    name: { type: String, reflect: true },
     suggestions: { type: Array, attribute: 'suggestions' },
     tokens: { type: Array, attribute: 'tokens' },
   };

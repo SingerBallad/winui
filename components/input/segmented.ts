@@ -198,7 +198,7 @@ export class WinSegmented extends WinElement {
     appearance: { type: String, reflect: true, default: 'default' },
     disabled: { type: Boolean },
     stretch: { type: Boolean },
-    name: { type: String },
+    name: { type: String, reflect: true },
   };
   declare selectionMode: 'single' | 'multiple';
   declare selectedIndex: number;

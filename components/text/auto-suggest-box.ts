@@ -282,6 +282,7 @@ export class WinAutoSuggestBox extends FieldElement {
         ev.preventDefault();
         const chosen = this.isSuggestionListOpen && this.selected >= 0 ? this._items[this.selected] : null;
         this.submit(chosen);
+        if (!chosen) this.submitImplicitly(ev);
         return;
       }
       case 'Escape':

@@ -294,7 +294,7 @@ export class WinComboBox extends WinElement {
     open: { type: Boolean },
     disabled: { type: Boolean },
     maxDropDownHeight: { type: Number, attribute: 'max-drop-down-height', default: 504 },
-    name: { type: String },
+    name: { type: String, reflect: true },
     text: { type: String },
   };
   declare header: string;

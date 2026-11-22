@@ -124,7 +124,7 @@ export class WinCheckBox extends WinElement {
     indeterminate: { type: Boolean },
     threeState: { type: Boolean, attribute: 'three-state' },
     disabled: { type: Boolean },
-    name: { type: String },
+    name: { type: String, reflect: true },
     value: { type: String, default: 'on' },
   };
   declare checked: boolean;

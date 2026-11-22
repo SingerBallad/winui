@@ -79,6 +79,7 @@ export class WinPasswordBox extends FieldElement {
       this.emit('passwordchanged', { password: el.value });
     });
     el.addEventListener('change', () => this.emit('change', { value: this.value }));
+    el.addEventListener('keydown', (ev) => this.submitImplicitly(ev));
 
     const reveal = this.$('.reveal');
     keepFocus(reveal);

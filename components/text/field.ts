@@ -158,6 +158,27 @@ export function upDownGlyph(size = 12): string {
   return `<svg class="w-glyph" width="${size}" height="${size}" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.4 6L8 0.6L13.6 6M2.4 10L8 15.4L13.6 10"/></svg>`;
 }
 
+const IMPLICIT_SUBMISSION_INPUTS = new Set([
+  'text',
+  'search',
+  'url',
+  'tel',
+  'email',
+  'password',
+  'date',
+  'month',
+  'week',
+  'time',
+  'datetime-local',
+  'number',
+]);
+
+function isSubmitButton(el: Element): el is HTMLElement {
+  if (el instanceof HTMLButtonElement) return el.type === 'submit';
+  if (el instanceof HTMLInputElement) return el.type === 'submit' || el.type === 'image';
+  return el.localName === 'win-button' && (el as HTMLElement & { type?: string }).type === 'submit';
+}
+
 export abstract class FieldElement extends WinElement {
   static override shadowInit: ShadowRootInit = { mode: 'open', delegatesFocus: true };
   static override formAssociated = true;
@@ -167,7 +188,7 @@ export abstract class FieldElement extends WinElement {
     placeholder: { type: String },
     disabled: { type: Boolean },
     readOnly: { type: Boolean, attribute: 'read-only' },
-    name: { type: String },
+    name: { type: String, reflect: true },
     required: { type: Boolean },
     selectionHighlightColor: { type: String, attribute: 'selection-highlight-color' },
   };
@@ -287,6 +308,32 @@ export abstract class FieldElement extends WinElement {
   formDisabledCallback(disabled: boolean): void {
     this.toggleAttribute('data-form-disabled', disabled);
     if (disabled !== this.disabled) this.disabled = disabled;
+  }
+
+  protected get blocksImplicitSubmission(): boolean {
+    return true;
+  }
+
+  protected submitImplicitly(ev: KeyboardEvent): void {
+    if (ev.key !== 'Enter' || ev.isComposing || ev.keyCode === 229) return;
+    const form = this.internals.form;
+    if (!form) return;
+    const preventedBefore = ev.defaultPrevented;
+    setTimeout(() => {
+      if (ev.defaultPrevented && !preventedBefore) return;
+      const elements = Array.from(form.elements);
+      const button = elements.find(isSubmitButton);
+      if (button) {
+        if (!(button as HTMLElement & { disabled?: boolean }).disabled && !button.matches(':disabled')) button.click();
+        return;
+      }
+      const blocking = elements.filter((el) =>
+        el instanceof FieldElement
+          ? el.blocksImplicitSubmission
+          : el instanceof HTMLInputElement && IMPLICIT_SUBMISSION_INPUTS.has(el.type),
+      );
+      if (blocking.length <= 1) form.requestSubmit();
+    });
   }
 }
 

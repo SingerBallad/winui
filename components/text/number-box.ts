@@ -332,6 +332,7 @@ export class WinNumberBox extends FieldElement {
         break;
       case 'Enter':
         this.commit();
+        this.submitImplicitly(ev);
         return;
       case 'Escape':
         if (this.input.value !== this.format(this.value)) {

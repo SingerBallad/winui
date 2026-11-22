@@ -119,7 +119,7 @@ export class WinRangeSelector extends WinElement {
     stepFrequency: { type: Number, attribute: 'step-frequency', default: 1 },
     header: { type: String },
     disabled: { type: Boolean },
-    name: { type: String },
+    name: { type: String, reflect: true },
     showTooltips: { type: Boolean, attribute: 'show-tooltips', default: true },
   };
   declare minimum: number;

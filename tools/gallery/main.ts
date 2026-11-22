@@ -14,6 +14,10 @@ import {
   setWallpaper,
   configureMaterials,
   getMaterialSettings,
+  setIconFont,
+  getIconFont,
+  isSegoeIconFontInstalled,
+  type IconFontMode,
   type MaterialKind,
 } from '../../index.ts';
 import { allPages, CATEGORIES } from './pages/registry.ts';
@@ -56,6 +60,7 @@ const BACKDROPS: [string, string][] = [
 const backdrop = params.get('backdrop') ?? store.get('backdrop') ?? 'mica';
 setSystemBackdrop(backdrop as MaterialKind);
 if (store.get('transparency') === 'off') configureMaterials({ transparency: 'off' });
+if ((params.get('icons') ?? store.get('icons')) === 'fluent') void setIconFont('fluent');
 
 let wallpaperVersion = '';
 let customWallpaper: Blob | null = null;
@@ -496,6 +501,12 @@ function renderSettings(): void {
       <win-settings-card header="透明效果" description="关闭后所有 Mica 与亚克力显示回退纯色（同时遵循系统的 prefers-reduced-transparency）" header-icon="">
         <win-toggle-switch data-transparency ${getMaterialSettings().transparency !== 'off' ? 'checked' : ''}></win-toggle-switch>
       </win-settings-card>
+      <win-settings-card header="图标字体" description="Symbol 与字体图标默认使用系统的 Segoe Fluent Icons，未安装时（macOS、Linux 等）自动改用内置的 Fluent UI System Icons 字形。本机${isSegoeIconFontInstalled() ? '已安装' : '未安装'} Segoe Fluent Icons" header-icon="\uE8D2">
+        <win-combo-box data-icon-font-select aria-label="图标字体">
+          <win-combo-box-item value="auto">自动</win-combo-box-item>
+          <win-combo-box-item value="fluent">Fluent UI System Icons</win-combo-box-item>
+        </win-combo-box>
+      </win-settings-card>
       <win-settings-card header="减少动画" description="关闭 Fluent 进出场与过渡动画（同时遵循系统的 prefers-reduced-motion）" header-icon="\uE916">
         <win-toggle-switch data-motion ${reduced ? 'checked' : ''}></win-toggle-switch>
       </win-settings-card>
@@ -570,6 +581,14 @@ function renderSettings(): void {
   transparency.addEventListener('change', () => {
     configureMaterials({ transparency: transparency.checked ? 'auto' : 'off' });
     store.set('transparency', transparency.checked ? null : 'off');
+  });
+  const iconFont = page.querySelector<HTMLElement & { value: string }>('[data-icon-font-select]')!;
+  iconFont.value = getIconFont();
+  iconFont.addEventListener('change', () => {
+    const v = iconFont.value as IconFontMode;
+    if (!v) return;
+    void setIconFont(v);
+    store.set('icons', v === 'fluent' ? v : null);
   });
   const motion = page.querySelector<HTMLElement & { checked: boolean }>('[data-motion]')!;
   motion.addEventListener('change', () => {

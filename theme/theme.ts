@@ -12,8 +12,12 @@ import {
   materialThemeTokens,
   type MaterialKind,
 } from './materials.ts';
+import { fluentIconFontFamily, installIconFont, loadFluentIconFont } from './icon-font.ts';
+
+export { fluentIconFontFamily, isSegoeIconFontInstalled } from './icon-font.ts';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
+export type IconFontMode = 'auto' | 'fluent';
 export type EffectiveTheme = 'light' | 'dark';
 
 export const typeRamp = {
@@ -37,7 +41,7 @@ export const fontFamilies = {
   small: `"Segoe UI Variable Small", ${FALLBACK_SANS}`,
   text: `"Segoe UI Variable Text", ${FALLBACK_SANS}`,
   display: `"Segoe UI Variable Display", ${FALLBACK_SANS}`,
-  icon: '"Segoe Fluent Icons", "Segoe MDL2 Assets"',
+  icon: `"Segoe Fluent Icons", "Segoe MDL2 Assets", "${fluentIconFontFamily}"`,
   mono: '"Cascadia Mono", "Cascadia Code", Consolas, "SF Mono", Menlo, "Courier New", monospace',
 } as const;
 
@@ -120,6 +124,9 @@ function buildThemeCss(): string {
   return `
 :root {
 ${declarations(accentDefaults)}${staticTokens()}${declarations(customAcrylicDefaults)}}
+:root[data-win-icon-font="fluent"] {
+  --w-font-family-icon: "${fluentIconFontFamily}", "Segoe Fluent Icons", "Segoe MDL2 Assets";
+}
 :root, [data-win-theme="light"] {
   color-scheme: light;
 ${light}}
@@ -240,6 +247,7 @@ export function installTheme(opts: InstallOptions = {}): void {
   global.textContent = buildGlobalCss();
   document.head.prepend(theme, global);
   installMaterials();
+  installIconFont();
 }
 
 export function setSystemBackdrop(kind: MaterialKind | null, target: HTMLElement = document.documentElement): void {
@@ -247,6 +255,21 @@ export function setSystemBackdrop(kind: MaterialKind | null, target: HTMLElement
   if (isSystemBackdropKind(kind)) requestSystemBackdrop(kind);
   if (kind) target.setAttribute('data-win-backdrop', kind);
   else target.removeAttribute('data-win-backdrop');
+}
+
+export function setIconFont(mode: IconFontMode): Promise<void> {
+  installTheme();
+  const root = document.documentElement;
+  if (mode === 'fluent') {
+    root.setAttribute('data-win-icon-font', 'fluent');
+    return loadFluentIconFont();
+  }
+  root.removeAttribute('data-win-icon-font');
+  return Promise.resolve();
+}
+
+export function getIconFont(): IconFontMode {
+  return document.documentElement.getAttribute('data-win-icon-font') === 'fluent' ? 'fluent' : 'auto';
 }
 
 const listeners = new Set<(theme: EffectiveTheme, target: Element) => void>();

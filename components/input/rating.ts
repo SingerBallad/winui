@@ -83,7 +83,7 @@ export class WinRating extends WinElement {
     clearEnabled: { type: Boolean, attribute: 'clear-enabled', default: true },
     readOnly: { type: Boolean, attribute: 'read-only' },
     disabled: { type: Boolean },
-    name: { type: String },
+    name: { type: String, reflect: true },
   };
   declare value: number;
   declare maxRating: number;

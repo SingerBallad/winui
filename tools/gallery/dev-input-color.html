@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN" data-win-app>
+<head>
+<meta charset="utf-8" />
+<title>dev · color</title>
+<style>
+  body { padding: 20px 28px; }
+  .row { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
+</style>
+</head>
+<body>
+<div class="row">
+  <win-color-picker id="cp1" color="#0078D4" previous-color="#FF8C00" alpha-enabled></win-color-picker>
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <win-color-picker id="cp2" color="#2ECC71" color-spectrum-shape="ring" more-button-visible style="width:312px"></win-color-picker>
+    <win-color-picker-button id="cpb" color="#E81123"></win-color-picker-button>
+  </div>
+</div>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import '../../components/input/index.ts';
+  installTheme();
+  const t = new URLSearchParams(location.search).get('theme');
+  if (t) setTheme(t);
+</script>
+</body>
+</html>

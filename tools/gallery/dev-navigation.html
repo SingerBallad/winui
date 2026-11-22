@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN" data-win-backdrop="mica">
+<head>
+<meta charset="utf-8" />
+<title>dev · navigation</title>
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { padding: 16px; box-sizing: border-box; display: grid; gap: 16px; grid-template-columns: 1fr; }
+  .frame { height: 420px; border: 1px solid var(--w-card-stroke-color-default); border-radius: 8px; overflow: hidden; background: var(--w-solid-background-fill-color-base); }
+  .page { padding: 16px 24px; }
+  h3 { font: var(--w-type-body-strong); margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div id="host"></div>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import '../../components/icons/index.ts';
+  import '../../components/buttons/index.ts';
+  import '../../components/flyouts/index.ts';
+  import '../../components/navigation/index.ts';
+  installTheme();
+  const params = new URLSearchParams(location.search);
+  if (params.get('theme')) setTheme(params.get('theme'));
+  const mode = params.get('mode') ?? 'left';
+  const which = params.get('demo') ?? 'nav';
+  const host = document.getElementById('host');
+  if (which === 'nav') {
+    host.innerHTML = `
+      <div class="frame" style="height:${params.get('h') ?? 520}px">
+        <win-navigation-view pane-display-mode="${mode}" pane-title="${params.get('title') ?? ''}" ${params.get('header') ? `header="${params.get('header')}"` : ''} ${params.get('back') ? '' : 'is-back-button-visible="collapsed"'}>
+          <win-navigation-view-item icon="Home" tag="home" selected>主页</win-navigation-view-item>
+          <win-navigation-view-item icon="Mail" tag="mail" info-badge="5">邮件</win-navigation-view-item>
+          <win-navigation-view-item-header>文件夹</win-navigation-view-item-header>
+          <win-navigation-view-item icon="Folder" tag="docs">文档
+            <win-navigation-view-item tag="d1" icon="Document">报告.docx</win-navigation-view-item>
+            <win-navigation-view-item tag="d2" icon="Document">计划.xlsx</win-navigation-view-item>
+          </win-navigation-view-item>
+          <win-navigation-view-item icon="Pictures" tag="pics">图片</win-navigation-view-item>
+          <win-navigation-view-item-separator></win-navigation-view-item-separator>
+          <win-navigation-view-item icon="Calendar" tag="cal">日历</win-navigation-view-item>
+          <win-navigation-view-item icon="People" tag="people" disabled>联系人（禁用）</win-navigation-view-item>
+          <win-navigation-view-item icon="Help" tag="help" slot="footer">帮助</win-navigation-view-item>
+          <div class="page"><h3 id="out">内容区</h3><p>选择左侧导航项以切换。</p></div>
+        </win-navigation-view>
+      </div>`;
+    const nv = host.querySelector('win-navigation-view');
+    nv.addEventListener('selectionchanged', (e) => {
+      document.getElementById('out').textContent = `已选择：${e.detail.selectedItem?.textContent.trim().split('\n')[0] ?? '无'}`;
+    });
+    window.nv = nv;
+  } else {
+    host.innerHTML = `
+      <section><h3>BreadcrumbBar</h3>
+        <win-breadcrumb-bar id="bc" style="width:${params.get('bcw') ?? 600}px">
+          <win-breadcrumb-bar-item>Home</win-breadcrumb-bar-item>
+          <win-breadcrumb-bar-item>Documents</win-breadcrumb-bar-item>
+          <win-breadcrumb-bar-item>Design</win-breadcrumb-bar-item>
+          <win-breadcrumb-bar-item>Northwind</win-breadcrumb-bar-item>
+          <win-breadcrumb-bar-item>Images</win-breadcrumb-bar-item>
+          <win-breadcrumb-bar-item>Folder1</win-breadcrumb-bar-item>
+        </win-breadcrumb-bar>
+      </section>
+      <section><h3>Pivot</h3>
+        <win-pivot pivot-title="EMAIL" style="height:120px">
+          <win-pivot-item header="All">All emails go here.</win-pivot-item>
+          <win-pivot-item header="Unread">Unread emails go here.</win-pivot-item>
+          <win-pivot-item header="Flagged">Flagged emails go here.</win-pivot-item>
+          <win-pivot-item header="Urgent">Urgent emails go here.</win-pivot-item>
+        </win-pivot>
+      </section>
+      <section><h3>SelectorBar</h3>
+        <win-selector-bar>
+          <win-selector-bar-item text="Recent" icon="Clock" selected></win-selector-bar-item>
+          <win-selector-bar-item text="Shared" icon="Share"></win-selector-bar-item>
+          <win-selector-bar-item text="Favorites" icon="Favorite"></win-selector-bar-item>
+        </win-selector-bar>
+      </section>
+      <section><h3>TabView</h3>
+        <win-tab-view style="width:720px">
+          <win-tab-view-item header="Document 0" icon="Document" selected><div style="padding:16px">Document 0 content</div></win-tab-view-item>
+          <win-tab-view-item header="Document 1" icon="Document"><div style="padding:16px">Document 1 content</div></win-tab-view-item>
+          <win-tab-view-item header="Document 2" icon="Document"><div style="padding:16px">Document 2 content</div></win-tab-view-item>
+        </win-tab-view>
+      </section>
+      <section><h3>TitleBar + Window</h3>
+        <win-window-frame style="width:720px;height:150px" window-title="App">
+          <win-title-bar slot="title-bar" bar-title="WinUI Gallery" subtitle="Preview" icon="Home" is-back-button-visible is-pane-toggle-button-visible>
+            <input placeholder="Search" style="width:320px;height:32px;box-sizing:border-box;border-radius:4px;border:1px solid var(--w-control-stroke-color-default);background:var(--w-control-fill-color-default);color:inherit;padding:0 10px">
+          </win-title-bar>
+          <div style="padding:16px">Window content</div>
+        </win-window-frame>
+      </section>
+      <section><h3>Pager</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+          <win-pager number-of-pages="5" display-mode="combo-box"></win-pager>
+          <win-pager number-of-pages="100" display-mode="number-box" selected-page-index="4"></win-pager>
+          <win-pager number-of-pages="20" display-mode="button-panel" selected-page-index="9"></win-pager>
+        </div>
+      </section>`;
+  }
+</script>
+</body>
+</html>

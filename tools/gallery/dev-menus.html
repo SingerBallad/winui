@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>dev · menus</title>
+<style>
+  body { padding: 24px 32px; }
+  section { margin-bottom: 28px; }
+  h2 { font: var(--w-type-body-strong); margin: 0 0 10px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+  .frame { border: 1px dashed rgba(127,127,127,.35); }
+</style>
+</head>
+<body>
+<section>
+  <h2>AppBarButton / AppBarToggleButton (stand-alone)</h2>
+  <div class="row">
+    <win-app-bar-button icon="Like" label="Like"></win-app-bar-button>
+    <win-app-bar-button icon="Add">Add</win-app-bar-button>
+    <win-app-bar-button icon="Delete" label="Delete" disabled></win-app-bar-button>
+    <win-app-bar-toggle-button icon="Shuffle" label="Shuffle"></win-app-bar-toggle-button>
+    <win-app-bar-toggle-button icon="RepeatAll" label="Repeat" checked></win-app-bar-toggle-button>
+    <win-app-bar-button icon="Like" label="Compact" compact class="frame"></win-app-bar-button>
+    <win-app-bar-separator></win-app-bar-separator>
+    <win-app-bar-button standard-command="save"></win-app-bar-button>
+  </div>
+</section>
+<section>
+  <h2>CommandBar (labels bottom, closed)</h2>
+  <div class="frame" style="width: 560px">
+    <win-command-bar id="cb1">
+      <win-app-bar-button icon="Add" label="Add"></win-app-bar-button>
+      <win-app-bar-button icon="Edit" label="Edit"></win-app-bar-button>
+      <win-app-bar-toggle-button icon="Like" label="Like" checked></win-app-bar-toggle-button>
+      <win-app-bar-separator></win-app-bar-separator>
+      <win-app-bar-button icon="Share" label="Share"></win-app-bar-button>
+      <win-app-bar-button slot="secondary" icon="Setting" label="Settings" accelerator="Ctrl+I"></win-app-bar-button>
+      <win-app-bar-toggle-button slot="secondary" icon="Pin" label="Pin to start" checked></win-app-bar-toggle-button>
+      <win-app-bar-separator slot="secondary"></win-app-bar-separator>
+      <win-app-bar-button slot="secondary" icon="Delete" label="Delete" accelerator="Delete"></win-app-bar-button>
+    </win-command-bar>
+  </div>
+</section>
+<section>
+  <h2>CommandBar (labels right) with content</h2>
+  <div class="frame" style="width: 640px">
+    <win-command-bar default-label-position="right" id="cb2">
+      <span slot="content" style="padding: 0 8px">Now playing…</span>
+      <win-app-bar-button icon="Add" label="Add"></win-app-bar-button>
+      <win-app-bar-button icon="Edit" label="Edit"></win-app-bar-button>
+      <win-app-bar-button icon="Share" label="Share"></win-app-bar-button>
+      <win-app-bar-button slot="secondary" label="Settings"></win-app-bar-button>
+      <win-app-bar-button slot="secondary" label="About"></win-app-bar-button>
+    </win-command-bar>
+  </div>
+</section>
+<section>
+  <h2>CommandBar narrow (dynamic overflow)</h2>
+  <div class="frame" style="width: 260px">
+    <win-command-bar id="cb3">
+      <win-app-bar-button icon="Add" label="Add"></win-app-bar-button>
+      <win-app-bar-button icon="Edit" label="Edit"></win-app-bar-button>
+      <win-app-bar-button icon="Share" label="Share"></win-app-bar-button>
+      <win-app-bar-button icon="Save" label="Save"></win-app-bar-button>
+      <win-app-bar-button icon="Delete" label="Delete"></win-app-bar-button>
+      <win-app-bar-button slot="secondary" label="Settings"></win-app-bar-button>
+    </win-command-bar>
+  </div>
+</section>
+<p style="height: 400px"></p>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import '../../components/icons/index.ts';
+  import '../../components/buttons/index.ts';
+  import '../../components/flyouts/index.ts';
+  import '../../components/menus/index.ts';
+  installTheme();
+  const params = new URLSearchParams(location.search);
+  if (params.get('theme')) setTheme(params.get('theme'));
+</script>
+</body>
+</html>

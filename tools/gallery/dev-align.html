@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>dev · icon alignment</title>
+<style>
+  body { padding: 16px; }
+  .row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .guide { position: relative; }
+  .guide::after { content: ''; position: absolute; left: -4px; right: -4px; top: 50%; border-top: 1px solid red; opacity: .55; pointer-events: none; }
+</style></head>
+<body>
+<div class="row">
+  <span class="guide"><win-drop-down-button>Email</win-drop-down-button></span>
+  <span class="guide"><win-button icon="Save">保存</win-button></span>
+  <span class="guide"><win-button icon="svg:M2 2h12v12H2z">Path</win-button></span>
+  <span class="guide"><win-split-button>Split</win-split-button></span>
+  <span class="guide"><win-combo-box placeholder="ComboBox" style="width:160px"><win-combo-box-item>A</win-combo-box-item></win-combo-box></span>
+  <span class="guide"><win-number-box value="3" spin-button-placement-mode="inline" style="width:120px"></win-number-box></span>
+  <span class="guide"><win-auto-suggest-box placeholder="Search" style="width:180px"></win-auto-suggest-box></span>
+</div>
+<div class="row">
+  <span class="guide" style="width:420px"><win-info-bar open heading="Title" message="Message" severity="success"></win-info-bar></span>
+  <span class="guide" style="width:300px"><win-expander header="Expander header"><div>content</div></win-expander></span>
+</div>
+<div class="row">
+  <span class="guide"><win-password-box value="secret" password-reveal-mode="peek" style="width:160px"></win-password-box></span>
+  <span class="guide"><win-hyperlink-button>Link</win-hyperlink-button></span>
+  <span class="guide"><win-toggle-button icon="Bold">Bold</win-toggle-button></span>
+  <span class="guide"><win-app-bar-button icon="Add" label="Add"></win-app-bar-button></span>
+  <span class="guide"><win-check-box checked>Check</win-check-box></span>
+</div>
+<script type="module">
+  import { installTheme, setTheme } from '../../index.ts';
+  installTheme();
+  const t = new URLSearchParams(location.search).get('theme'); if (t) setTheme(t);
+</script>
+</body></html>

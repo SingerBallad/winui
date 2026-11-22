@@ -1,0 +1,4 @@
+dist/
+.backup/
+package-lock.json
+*.html

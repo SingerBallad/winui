@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN" data-win-app>
+<head>
+<meta charset="utf-8" />
+<title>dev · text</title>
+<style>
+  body { padding: 20px 28px; }
+  section { margin-bottom: 18px; }
+  h2 { font: var(--w-type-body-strong); margin: 0 0 8px; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+  .w { width: 260px; }
+</style>
+</head>
+<body>
+<section>
+  <h2>TextBox</h2>
+  <div class="row">
+    <win-text-box id="tb1" class="w" placeholder="Placeholder"></win-text-box>
+    <win-text-box id="tb2" class="w" header="Enter your name:" placeholder="Name" value="Jane Doe"></win-text-box>
+    <win-text-box id="tb3" class="w" header="With description" placeholder="Hover me" description="Description text goes here."></win-text-box>
+    <win-text-box class="w" header="Disabled" value="Disabled text" disabled></win-text-box>
+    <win-text-box class="w" header="Read-only" value="I am read-only" read-only></win-text-box>
+  </div>
+</section>
+<section>
+  <h2>Multi-line</h2>
+  <div class="row">
+    <win-text-box id="ml" style="width:400px;max-height:172px" header="Enter text:" accepts-return text-wrapping="wrap" value="The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog."></win-text-box>
+  </div>
+</section>
+<section>
+  <h2>PasswordBox / NumberBox</h2>
+  <div class="row">
+    <win-password-box id="pw" class="w" header="Password" placeholder="Enter your password" value="secret123"></win-password-box>
+    <win-number-box id="nb1" class="w" header="Enter an expression:" placeholder="1 + 2^2" accepts-expression></win-number-box>
+    <win-number-box id="nb2" class="w" header="Inline spin:" value="1" spin-button-placement-mode="inline" small-change="10" large-change="100"></win-number-box>
+    <win-number-box id="nb3" class="w" header="Compact spin:" value="1" spin-button-placement-mode="compact"></win-number-box>
+  </div>
+</section>
+<section>
+  <h2>AutoSuggestBox</h2>
+  <div class="row">
+    <win-auto-suggest-box id="asb" class="w" header="Search" placeholder="Type a control name"></win-auto-suggest-box>
+    <win-auto-suggest-box class="w" placeholder="No query icon" query-icon="none"></win-auto-suggest-box>
+  </div>
+</section>
+<section>
+  <h2>RichEditBox</h2>
+  <win-rich-edit-box id="reb" style="width:420px" header="Notes" placeholder="Type something..."><p>Hello <b>bold</b> and <i>italic</i> text.</p></win-rich-edit-box>
+</section>
+<section>
+  <h2>TextBlock / RichTextBlock</h2>
+  <win-text-block text-style="caption">Caption 12</win-text-block>
+  <win-text-block>Body (default) 14</win-text-block>
+  <win-text-block text-style="body-strong">Body strong</win-text-block>
+  <win-text-block text-style="subtitle">Subtitle 20</win-text-block>
+  <win-text-block text-style="title">Title 28</win-text-block>
+  <win-text-block foreground="secondary" style="width:200px" text-trimming="character-ellipsis">A long trimmed text that will be cut with an ellipsis</win-text-block>
+  <win-rich-text-block style="max-width:520px">
+    <p>RichTextBlock with <b>bold</b>, <i>italic</i>, <u>underline</u> and a <a href="https://learn.microsoft.com/windows/apps/winui/">hyperlink</a>. <mark>Highlighted</mark> text.</p>
+  </win-rich-text-block>
+</section>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import '../../components/buttons/index.ts';
+  import '../../components/text/index.ts';
+  installTheme();
+  const t = new URLSearchParams(location.search).get('theme');
+  if (t) setTheme(t);
+  const cats = ['Abyssinian', 'Aegean', 'American Bobtail', 'American Curl', 'American Shorthair', 'Balinese', 'Bengal', 'Birman', 'Bombay', 'British Shorthair'];
+  const asb = document.getElementById('asb');
+  asb.addEventListener('textchanged', (e) => {
+    if (e.detail.reason !== 'user-input') return;
+    const q = e.detail.text.toLowerCase();
+    asb.items = q ? cats.filter((c) => c.toLowerCase().includes(q)) : [];
+  });
+</script>
+</body>
+</html>

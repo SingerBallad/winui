@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN" data-win-app>
+<head>
+<meta charset="utf-8" />
+<title>dev · combo</title>
+<style>
+  body { padding: 24px 32px; }
+  .row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; margin-bottom: 24px; }
+</style>
+</head>
+<body>
+<div class="row">
+  <win-combo-box id="c1" header="Colors" placeholder="Pick a color" style="width:200px">
+    <win-combo-box-item>Blue</win-combo-box-item>
+    <win-combo-box-item>Green</win-combo-box-item>
+    <win-combo-box-item selected>Red</win-combo-box-item>
+    <win-combo-box-item>Yellow</win-combo-box-item>
+    <win-combo-box-item disabled>Purple (disabled)</win-combo-box-item>
+  </win-combo-box>
+  <win-combo-box id="c2" header="Font" placeholder="Pick a font" style="width:200px">
+    <win-combo-box-item>Arial</win-combo-box-item>
+    <win-combo-box-item>Comic Sans MS</win-combo-box-item>
+    <win-combo-box-item>Courier New</win-combo-box-item>
+  </win-combo-box>
+  <win-combo-box id="c3" header="Font size (editable)" editable placeholder="Size" style="width:200px" description="Type a size or pick one">
+    <win-combo-box-item>8</win-combo-box-item>
+    <win-combo-box-item>9</win-combo-box-item>
+    <win-combo-box-item selected>10</win-combo-box-item>
+    <win-combo-box-item>11</win-combo-box-item>
+    <win-combo-box-item>12</win-combo-box-item>
+  </win-combo-box>
+  <win-combo-box disabled header="Disabled" placeholder="Disabled" style="width:200px"><win-combo-box-item>One</win-combo-box-item></win-combo-box>
+</div>
+<div id="log" style="font: var(--w-type-caption); color: var(--w-text-fill-color-secondary)"></div>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import '../../components/input/index.ts';
+  installTheme();
+  const t = new URLSearchParams(location.search).get('theme');
+  if (t) setTheme(t);
+  document.addEventListener('selectionchanged', (e) => (document.getElementById('log').textContent = `selectionchanged: ${e.target.id} -> ${e.detail.selectedIndex} (${e.detail.value})`));
+</script>
+</body>
+</html>

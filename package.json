@@ -1,0 +1,49 @@
+{
+  "name": "winui",
+  "version": "1.0.0",
+  "description": "WinUI 3 for the web",
+  "license": "MIT",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./tokens": "./tokens.ts",
+    "./theme": "./theme/theme.ts",
+    "./motion": "./motion/index.ts",
+    "./base": "./base/index.ts",
+    "./components": "./components/index.ts",
+    "./components/*": "./components/*/index.ts",
+    "./dist": "./dist/winui.js"
+  },
+  "scripts": {
+    "check": "node node_modules/typescript-native/bin/tsc --noEmit",
+    "gallery": "vite --config tools/gallery/vite.config.js",
+    "build": "vite build --config vite.config.lib.mjs && npm run build:types",
+    "build:types": "node node_modules/typescript-native/bin/tsc -p tsconfig.build.json",
+    "format": "prettier --write .",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.73.0",
+    "typescript-native": "npm:typescript@^7.0.2",
+    "vite": "^7.2.7"
+  },
+  "files": [
+    "index.ts",
+    "tokens.ts",
+    "theme/",
+    "motion/",
+    "base/",
+    "components/"
+  ],
+  "sideEffects": [
+    "./index.ts",
+    "./components/**/*.ts"
+  ]
+}

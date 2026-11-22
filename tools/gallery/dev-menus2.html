@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>dev · menus 2</title>
+<style>
+  body { padding: 24px 32px; }
+  section { margin-bottom: 24px; }
+  h2 { font: var(--w-type-body-strong); margin: 0 0 10px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+</style>
+</head>
+<body>
+<section>
+  <h2>MenuBar</h2>
+  <win-menu-bar id="mb">
+    <win-menu-bar-item title="File">
+      <win-menu-flyout-sub-item text="New">
+        <win-menu-flyout-item text="Plain Text Document"></win-menu-flyout-item>
+        <win-menu-flyout-item text="Rich Text Document"></win-menu-flyout-item>
+      </win-menu-flyout-sub-item>
+      <win-menu-flyout-item text="Open..." accelerator="Ctrl+O"></win-menu-flyout-item>
+      <win-menu-flyout-item text="Save" accelerator="Ctrl+S"></win-menu-flyout-item>
+      <win-menu-flyout-separator></win-menu-flyout-separator>
+      <win-menu-flyout-item text="Exit"></win-menu-flyout-item>
+    </win-menu-bar-item>
+    <win-menu-bar-item title="Edit">
+      <win-menu-flyout-item text="Undo" accelerator="Ctrl+Z"></win-menu-flyout-item>
+      <win-menu-flyout-item text="Cut" accelerator="Ctrl+X"></win-menu-flyout-item>
+      <win-menu-flyout-item text="Copy" accelerator="Ctrl+C"></win-menu-flyout-item>
+      <win-menu-flyout-item text="Paste" accelerator="Ctrl+V"></win-menu-flyout-item>
+    </win-menu-bar-item>
+    <win-menu-bar-item title="Help">
+      <win-menu-flyout-item text="About"></win-menu-flyout-item>
+    </win-menu-bar-item>
+  </win-menu-bar>
+</section>
+<section>
+  <h2>CommandBarFlyout / ContentDialog / TeachingTip / Popover / ToolTip</h2>
+  <div class="row">
+    <win-button id="cbfBtn">CommandBarFlyout</win-button>
+    <win-command-bar-flyout id="cbf" placement="bottom-start">
+      <win-app-bar-button icon="Share" label="Share"></win-app-bar-button>
+      <win-app-bar-button icon="Save" label="Save"></win-app-bar-button>
+      <win-app-bar-button icon="Delete" label="Delete"></win-app-bar-button>
+      <win-app-bar-button slot="secondary" icon="FontSize" label="Resize"></win-app-bar-button>
+      <win-app-bar-button slot="secondary" icon="Rotate" label="Rotate" accelerator="Ctrl+R"></win-app-bar-button>
+      <win-app-bar-toggle-button slot="secondary" label="Show grid" checked></win-app-bar-toggle-button>
+    </win-command-bar-flyout>
+    <win-button id="dlgBtn">ContentDialog</win-button>
+    <win-content-dialog id="dlg" title="Save your work?" primary-button-text="Save" secondary-button-text="Don't Save" close-button-text="Cancel" default-button="primary">
+      <p style="margin:0">Lorem ipsum dolor sit amet, adipisicing elit.</p>
+    </win-content-dialog>
+    <win-button id="tipTarget">Save (TeachingTip)</win-button>
+    <win-teaching-tip id="tip" target="tipTarget" title="Saving automatically" subtitle="We save your changes as you go - so you never have to."></win-teaching-tip>
+    <win-button id="popBtn">Popover</win-button>
+    <win-popover id="pop" is-light-dismiss-enabled horizontal-offset="0" vertical-offset="40"><div style="padding:16px;background:var(--w-solid-background-fill-color-tertiary);border:1px solid var(--w-surface-stroke-color-default);border-radius:8px">Simple Popup</div></win-popover>
+    <win-button id="ttBtn" tooltip="Simple ToolTip" accelerator="Ctrl+T">Hover me</win-button>
+  </div>
+</section>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import '../../components/icons/index.ts';
+  import '../../components/buttons/index.ts';
+  import '../../components/flyouts/index.ts';
+  import '../../components/menus/index.ts';
+  installTheme();
+  const params = new URLSearchParams(location.search);
+  if (params.get('theme')) setTheme(params.get('theme'));
+  document.getElementById('cbfBtn').addEventListener('click', (e) => document.getElementById('cbf').showAt(e.currentTarget, { placement: 'bottom-start' }));
+  document.getElementById('dlgBtn').addEventListener('click', () => document.getElementById('dlg').showAsync());
+  document.getElementById('tipTarget').addEventListener('click', () => (document.getElementById('tip').isOpen = true));
+  document.getElementById('popBtn').addEventListener('click', () => (document.getElementById('pop').isOpen = true));
+</script>
+</body>
+</html>

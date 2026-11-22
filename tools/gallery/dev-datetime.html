@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>dev · datetime</title>
+<link rel="icon" href="data:,">
+<style>
+  body { padding: 24px 32px; }
+  section { margin-bottom: 24px; }
+  h2 { font: var(--w-type-body-strong); margin: 0 0 10px; }
+  .row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+</style>
+</head>
+<body>
+<section>
+  <h2>CalendarView</h2>
+  <div class="row">
+    <win-calendar-view id="cv1" selected-date="2026-11-12"></win-calendar-view>
+    <win-calendar-view id="cv2" selection-mode="multiple" is-group-label-visible locale="en-US"></win-calendar-view>
+    <win-calendar-view id="cv3" display-mode="year"></win-calendar-view>
+  </div>
+</section>
+<section id="pickers">
+  <h2>Pickers</h2>
+  <div class="row">
+    <win-calendar-date-picker id="cdp" header="日历" placeholder="选择日期"></win-calendar-date-picker>
+    <win-date-picker id="dp" header="日期"></win-date-picker>
+    <win-time-picker id="tp" header="时间"></win-time-picker>
+  </div>
+</section>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import '../../components/datetime/index.ts';
+  installTheme();
+  const params = new URLSearchParams(location.search);
+  if (params.get('theme')) setTheme(params.get('theme'));
+  const cv2 = document.getElementById('cv2');
+  const t = new Date();
+  cv2.isBlackout = (d) => d.getDay() === 0 && d.getDate() < 8;
+  cv2.selectedDates = [new Date(t.getFullYear(), t.getMonth(), 3), new Date(t.getFullYear(), t.getMonth(), 5)];
+  cv2.setDensityColors(new Date(t.getFullYear(), t.getMonth(), 10), ['#0f7b0f', '#c42b1c']);
+  cv2.setDensityColors(new Date(t.getFullYear(), t.getMonth(), 11), ['#005fb8', '#005fb8', '#9d5d00']);
+  cv2.refresh();
+</script>
+</body>
+</html>

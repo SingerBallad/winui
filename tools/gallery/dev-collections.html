@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>dev · collections</title>
+<style>
+  body { padding: 20px 28px; }
+  h2 { font: var(--w-type-body-strong); margin: 16px 0 8px; }
+  .row { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+  .box { width: 300px; border: 1px solid var(--w-card-stroke-color-default); border-radius: 8px; background: var(--w-card-background-fill-color-default); }
+  .tile { width: 96px; height: 96px; border-radius: 4px; display: grid; place-items: center; color: #fff; font: var(--w-type-body-strong); }
+  .person { display: flex; align-items: center; gap: 12px; padding: 6px 0; }
+  .ava { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--w-font-family-text); background: var(--w-control-strong-fill-color-default); color: var(--w-text-on-accent-fill-color-primary); }
+  .sub { font: var(--w-type-caption); color: var(--w-text-fill-color-secondary); }
+</style>
+</head>
+<body>
+<div class="row" id="lists"></div>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import '../../components/collections/index.ts';
+  installTheme();
+  const p = new URLSearchParams(location.search);
+  if (p.get('theme')) setTheme(p.get('theme'));
+  const people = ['Kendall Collins','Henry Ross','Vance DeLeon','Victoria Burke','Amber Rodriguez','Amari Rivera','Jessie Irwin','Quinn Campbell'];
+  const ini = (n) => n.split(' ').map(s => s[0]).join('');
+  const person = (n) => `<div class="person"><span class="ava">${ini(n)}</span><span><div>${n}</div><div class="sub">${n.split(' ')[0].toLowerCase()}@contoso.com</div></span></div>`;
+  const host = document.getElementById('lists');
+  host.innerHTML = `
+    <div><h2>ListView single</h2><win-list-view class="box" id="lv1" style="height:280px">${people.map((n,i)=>`<win-list-view-item ${i===1?'selected':''} ${i===4?'disabled':''}>${person(n)}</win-list-view-item>`).join('')}</win-list-view></div>
+    <div><h2>ListView multiple</h2><win-list-view class="box" selection-mode="multiple">${['Item 1','Item 2','Item 3','Item 4'].map((n,i)=>`<win-list-view-item ${i%2?'selected':''}>${n}</win-list-view-item>`).join('')}</win-list-view></div>
+    <div><h2>GridView</h2><win-grid-view class="box" style="width:420px;padding:8px" selection-mode="multiple">${['#0078d4','#8764b8','#e3008c','#ca5010','#498205','#038387'].map((c,i)=>`<win-grid-view-item ${i===1||i===3?'selected':''}><div class="tile" style="background:linear-gradient(135deg, ${c}, #000a)">${i+1}</div></win-grid-view-item>`).join('')}</win-grid-view></div>
+  `;
+</script>
+</body>
+</html>

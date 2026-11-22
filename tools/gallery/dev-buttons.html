@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>dev · buttons</title>
+<style>
+  body { padding: 24px 32px; }
+  section { margin-bottom: 24px; }
+  h2 { font: var(--w-type-body-strong); margin: 0 0 10px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .glyphs { display: grid; grid-template-columns: repeat(6, auto); gap: 10px 22px; align-items: center; justify-content: start; }
+  .g { display: inline-flex; gap: 6px; align-items: center; }
+  .font { font-family: "Segoe Fluent Icons", sans-serif; line-height: 1; display: inline-flex; }
+  .box { outline: 1px dashed rgba(127,127,127,.4); }
+  .ctx { width: 280px; height: 60px; display: grid; place-items: center; border: 1px dashed var(--w-control-strong-stroke-color-default); border-radius: 8px; }
+</style>
+</head>
+<body>
+<section>
+  <h2>Button</h2>
+  <div class="row">
+    <win-button>Standard button</win-button>
+    <win-button appearance="accent">Accent style button</win-button>
+    <win-button appearance="subtle">Subtle</win-button>
+    <win-button disabled>Disabled</win-button>
+    <win-button appearance="accent" disabled>Accent disabled</win-button>
+    <win-button icon="Save">带图标</win-button>
+    <win-button icon="Add" aria-label="add"></win-button>
+  </div>
+</section>
+<section>
+  <h2>RepeatButton / ToggleButton / HyperlinkButton</h2>
+  <div class="row">
+    <win-repeat-button id="rep" delay="500" interval="100">Click and hold</win-repeat-button><span id="repn">0</span>
+    <win-toggle-button>ToggleButton</win-toggle-button>
+    <win-toggle-button checked>Checked</win-toggle-button>
+    <win-toggle-button checked disabled>Checked disabled</win-toggle-button>
+    <win-hyperlink-button href="https://learn.microsoft.com/windows/apps/">Microsoft docs</win-hyperlink-button>
+    <win-hyperlink-button disabled>Disabled link</win-hyperlink-button>
+  </div>
+</section>
+<section>
+  <h2>DropDownButton / SplitButton / ToggleSplitButton</h2>
+  <div class="row">
+    <win-drop-down-button>Email
+      <win-menu-flyout slot="flyout">
+        <win-menu-flyout-item icon="Send" accelerator="Ctrl+Enter">Send</win-menu-flyout-item>
+        <win-menu-flyout-item icon="MailReply">Reply</win-menu-flyout-item>
+        <win-menu-flyout-item icon="MailReplyAll">Reply All</win-menu-flyout-item>
+      </win-menu-flyout>
+    </win-drop-down-button>
+    <win-drop-down-button appearance="accent">Accent</win-drop-down-button>
+    <win-split-button id="split">Choose color
+      <win-menu-flyout slot="flyout">
+        <win-menu-flyout-item text="Open" accelerator="Ctrl+O"></win-menu-flyout-item>
+        <win-menu-flyout-separator></win-menu-flyout-separator>
+        <win-toggle-menu-flyout-item checked>Show status bar</win-toggle-menu-flyout-item>
+        <win-toggle-menu-flyout-item>Word wrap</win-toggle-menu-flyout-item>
+        <win-menu-flyout-separator></win-menu-flyout-separator>
+        <win-radio-menu-flyout-item group="z" checked>Small icons</win-radio-menu-flyout-item>
+        <win-radio-menu-flyout-item group="z">Medium icons</win-radio-menu-flyout-item>
+        <win-menu-flyout-sub-item text="Sort by">
+          <win-menu-flyout-item>Name</win-menu-flyout-item>
+          <win-menu-flyout-item>Date modified</win-menu-flyout-item>
+          <win-menu-flyout-sub-item text="More">
+            <win-menu-flyout-item>Size</win-menu-flyout-item>
+            <win-menu-flyout-item>Type</win-menu-flyout-item>
+          </win-menu-flyout-sub-item>
+        </win-menu-flyout-sub-item>
+        <win-menu-flyout-item disabled>Disabled item</win-menu-flyout-item>
+      </win-menu-flyout>
+    </win-split-button>
+    <win-toggle-split-button checked>Toggle split</win-toggle-split-button>
+    <win-split-button disabled>Disabled split</win-split-button>
+    <win-button id="flybtn">Empty cart
+      <win-flyout slot="flyout">
+        <div style="display:flex;flex-direction:column;gap:12px;max-width:260px">
+          <div>All items will be removed. Do you want to continue?</div>
+          <win-button appearance="accent">Yes, empty my cart</win-button>
+        </div>
+      </win-flyout>
+    </win-button>
+  </div>
+</section>
+<section>
+  <h2>ContextFlyout</h2>
+  <div class="ctx" context-flyout="ctxmenu">右键单击此处</div>
+  <win-menu-flyout id="ctxmenu">
+    <win-menu-flyout-item icon="Cut" accelerator="Ctrl+X">Cut</win-menu-flyout-item>
+    <win-menu-flyout-item icon="Copy" accelerator="Ctrl+C">Copy</win-menu-flyout-item>
+    <win-menu-flyout-item icon="Paste" accelerator="Ctrl+V">Paste</win-menu-flyout-item>
+  </win-menu-flyout>
+</section>
+<section>
+  <h2>Glyph calibration (SVG | font) @12 / 16 / 24</h2>
+  <div class="glyphs" id="glyphs"></div>
+</section>
+<section class="row">
+  <win-button id="theme">Toggle theme</win-button>
+</section>
+<script type="module">
+  import { installTheme, setTheme, getEffectiveTheme, glyph } from '../../index.ts';
+  installTheme();
+  const params = new URLSearchParams(location.search);
+  if (params.get('theme')) setTheme(params.get('theme'));
+  document.getElementById('theme').addEventListener('click', () =>
+    setTheme(getEffectiveTheme() === 'dark' ? 'light' : 'dark', document.documentElement, { animate: true }));
+  let n = 0;
+  document.getElementById('rep').addEventListener('click', () => (document.getElementById('repn').textContent = String(++n)));
+  const map = { chevronDown: 0xE70D, chevronUp: 0xE70E, chevronLeft: 0xE76B, chevronRight: 0xE76C, chevronDownSmall: 0xE96E, chevronRightMed: 0xE974,
+    checkMark: 0xE73E, dash: 0xE9AE, cancel: 0xE711, add: 0xE710, more: 0xE712, globalNav: 0xE700, back: 0xE72B, search: 0xE721,
+    calendar: 0xE787, clock: 0xE823, info: 0xE946, star: 0xE734, starFill: 0xE735, settings: 0xE713, dot: 0xE915, caretDown: 0xEDDC, eye: 0xE7B3, clear: 0xE894 };
+  const host = document.getElementById('glyphs');
+  for (const [name, cp] of Object.entries(map)) {
+    const cell = document.createElement('div');
+    cell.className = 'g';
+    cell.title = name;
+    cell.insertAdjacentHTML('beforeend',
+      `<span class="box" style="position:relative;width:48px;height:48px;display:inline-block">
+         <span class="font" style="position:absolute;inset:0;font-size:48px">${String.fromCodePoint(cp)}</span>
+         <span style="position:absolute;inset:0;color:rgba(230,0,0,.6)">${glyph(name, 48)}</span>
+       </span>
+       <span class="box">${glyph(name, 16)}</span><span class="font box" style="font-size:16px">${String.fromCodePoint(cp)}</span>
+       <span style="font-size:10px;opacity:.6">${name}</span>`);
+    host.append(cell);
+  }
+</script>
+</body>
+</html>

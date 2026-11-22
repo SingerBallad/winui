@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Materials harness</title>
+<style>
+  html, body { margin: 0; height: 100%; }
+  body { font: 14px 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif; }
+  #bg { position: fixed; inset: 0; display: grid; grid-template-columns: repeat(var(--cols, 14), 1fr); }
+  #bg > div { height: 100%; }
+  #stage { position: relative; display: grid; grid-template-columns: repeat(4, 220px); gap: 16px; padding: 24px; }
+  .cell { height: 120px; border-radius: 8px; padding: 8px; box-sizing: border-box; }
+  .cell b { display: block; font: 600 12px/16px 'Segoe UI', sans-serif; }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="stage"></div>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import { materialKinds, setWallpaper, setAcrylic, configureMaterials } from '../../theme/materials.ts';
+  import '../../components/layout/index.ts';
+  import '../../components/flyouts/index.ts';
+  import '../../components/buttons/index.ts';
+  import '../../components/navigation/index.ts';
+  installTheme();
+  const params = new URLSearchParams(location.search);
+  if (params.get('theme')) setTheme(params.get('theme'));
+  if (params.get('active') === 'always') configureMaterials({ windowActivation: 'always-active' });
+  const colors = (params.get('colors') ?? '#FF0000,#00FF00,#0000FF,#FFFFFF,#000000,#808080,#FF8000,#8000FF,#00FFFF,#FFFF00,#202020,#F3F3F3,#3A6EA5,#C8A060').split(',');
+  const bg = document.getElementById('bg');
+  bg.style.setProperty('--cols', colors.length);
+  for (const c of colors) bg.append(Object.assign(document.createElement('div'), { style: `background:${c}` }));
+  const stage = document.getElementById('stage');
+  for (const k of materialKinds) {
+    const box = document.createElement('win-box');
+    box.className = 'cell';
+    box.setAttribute('material', k);
+    box.innerHTML = `<b>${k}</b>`;
+    stage.append(box);
+  }
+  window.__materials = { setWallpaper, setAcrylic, configureMaterials, setTheme };
+  window.__ready = true;
+</script>
+</body>
+</html>

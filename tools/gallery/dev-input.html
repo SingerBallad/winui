@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN" data-win-app>
+<head>
+<meta charset="utf-8" />
+<title>dev · input</title>
+<style>
+  body { padding: 20px 28px; }
+  section { margin-bottom: 18px; }
+  h2 { font: var(--w-type-body-strong); margin: 0 0 8px; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .ref { position: relative; width: 20px; height: 20px; border-radius: 4px; background: var(--w-accent-fill-color-default); }
+  .ref span { position: absolute; left: 4px; top: 5px; width: 12px; height: 12px; font: 12px/1 "Segoe Fluent Icons", sans-serif; color: var(--w-text-on-accent-fill-color-primary); }
+  .big { transform: scale(4); transform-origin: 0 0; display: inline-flex; gap: 6px; margin-bottom: 70px; }
+</style>
+</head>
+<body>
+<section><h2>CheckBox</h2><div class="row">
+  <win-check-box>Two-state CheckBox</win-check-box>
+  <win-check-box checked>Checked</win-check-box>
+  <win-check-box indeterminate>Indeterminate</win-check-box>
+  <win-check-box disabled>Disabled</win-check-box>
+  <win-check-box checked disabled>Checked disabled</win-check-box>
+  <win-check-box indeterminate disabled>Ind. disabled</win-check-box>
+  <win-check-box id="cb3" three-state>Three-state</win-check-box>
+</div></section>
+<section><h2>Glyph vs font (x4): ours | font E73E | ours ind | font E9AE</h2>
+  <div class="big"><win-check-box checked style="min-width:0"></win-check-box><span class="ref"><span>&#xE73E;</span></span><win-check-box indeterminate style="min-width:0"></win-check-box><span class="ref"><span style="top:4px">&#xE9AE;</span></span></div>
+</section>
+<section><h2>RadioButton / RadioGroup</h2><div class="row" style="align-items:flex-start">
+  <win-radio-button name="g1">Option 1</win-radio-button>
+  <win-radio-button name="g1" checked>Option 2</win-radio-button>
+  <win-radio-button name="g1" disabled>Disabled</win-radio-button>
+  <win-radio-button name="g2" checked disabled>Checked disabled</win-radio-button>
+  <win-radio-group header="Options" id="rbs"><win-radio-button>Red</win-radio-button><win-radio-button checked>Green</win-radio-button><win-radio-button>Blue</win-radio-button></win-radio-group>
+  <win-radio-group header="Two columns" max-columns="2"><win-radio-button>Item 1</win-radio-button><win-radio-button>Item 2</win-radio-button><win-radio-button>Item 3</win-radio-button><win-radio-button>Item 4</win-radio-button><win-radio-button>Item 5</win-radio-button></win-radio-group>
+</div></section>
+<section><h2>ToggleSwitch</h2><div class="row">
+  <win-toggle-switch header="Toggle work"></win-toggle-switch>
+  <win-toggle-switch checked on-content="Working" off-content="Do work"></win-toggle-switch>
+  <win-toggle-switch disabled></win-toggle-switch>
+  <win-toggle-switch checked disabled></win-toggle-switch>
+</div></section>
+<section><h2>Slider</h2><div class="row">
+  <win-slider style="width:200px" value="40"></win-slider>
+  <win-slider style="width:240px" header="Ticks outside" min="0" max="100" step="10" tick-frequency="10" tick-placement="outside" value="60"></win-slider>
+  <win-slider style="width:200px" tick-frequency="20" tick-placement="inline" value="20"></win-slider>
+  <win-slider style="width:200px" disabled value="70"></win-slider>
+  <win-slider orientation="vertical" style="height:120px" value="30" tick-frequency="25" tick-placement="outside"></win-slider>
+</div></section>
+<section><h2>Rating</h2><div class="row">
+  <win-rating caption="1,024 ratings" placeholder-value="3"></win-rating>
+  <win-rating value="3.5"></win-rating>
+  <win-rating value="4" disabled></win-rating>
+</div></section>
+<script type="module">
+  import { installTheme, setTheme } from '../../theme/theme.ts';
+  import '../../components/input/index.ts';
+  installTheme();
+  const t = new URLSearchParams(location.search).get('theme');
+  if (t) setTheme(t);
+</script>
+</body>
+</html>
